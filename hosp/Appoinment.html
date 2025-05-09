@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Appointment Form</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      // Function to generate a random token number
+      function generateTokenNumber() {
+        const tokenInput = document.getElementById("token");
+        const randomToken = Math.floor(1000 + Math.random() * 9000); // Generate a 4-digit random number
+        tokenInput.value = randomToken; // Set the generated token number in the input field
+      }
+
+      // Function to handle form submission
+      function submitAppointment(event) {
+        event.preventDefault(); // Prevent form from refreshing the page
+
+        // Get form values
+        const doctor = document.getElementById("doctor").value;
+        const token = document.getElementById("token").value;
+        const patientName = document.getElementById("patientName").value;
+        const age = document.getElementById("age").value;
+        const city = document.getElementById("city").value;
+        const village = document.getElementById("village").value;
+        const mobile = document.getElementById("mobile").value;
+        const additionalInfo = document.getElementById("additionalInfo").value;
+
+        // Validate form fields
+        if (!doctor || !patientName || !mobile) {
+          alert("Please fill in all required fields.");
+          return;
+        }
+
+        // Generate token card
+        const tokenCard = `
+          <div class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-lg shadow-lg mt-6">
+            <h2 class="text-3xl font-bold text-center mb-4">Token Card</h2>
+            <div class="text-center mb-4">
+              <p class="text-lg"><strong>Appointment Date:</strong> ${new Date().toLocaleDateString()}</p>
+              <p class="text-lg"><strong>Appointment Time:</strong> ${new Date().toLocaleTimeString()}</p>
+            </div>
+            <div class="bg-white text-gray-800 p-4 rounded-lg shadow-md">
+              <p class="text-xl font-bold mb-2"><strong>Token Number:</strong> ${token}</p>
+              <p class="text-lg"><strong>Doctor:</strong> ${doctor}</p>
+              <p class="text-lg"><strong>Patient Name:</strong> ${patientName}</p>
+              <p class="text-lg"><strong>Age:</strong> ${age}</p>
+              <p class="text-lg"><strong>City:</strong> ${city}</p>
+              <p class="text-lg"><strong>Village:</strong> ${village}</p>
+              <p class="text-lg"><strong>Mobile Number:</strong> ${mobile}</p>
+              <p class="text-lg"><strong>Additional Information:</strong> ${additionalInfo}</p>
+            </div>
+            <p class="text-sm text-gray-200 mt-4 text-center">
+              Please arrive at the hospital 15 minutes before your appointment.
+            </p>
+          </div>
+        `;
+
+        // Display token card
+        const tokenCardContainer =
+          document.getElementById("tokenCardContainer");
+        tokenCardContainer.innerHTML = tokenCard;
+
+        // Reset the form
+        document.querySelector("form").reset();
+        generateTokenNumber(); // Generate a new token number
+      }
+
+      // Call the function when the page loads
+      window.onload = generateTokenNumber;
+    </script>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div class="container mx-auto py-8">
+      <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">
+        Hospital Appointment Form
+      </h1>
+      <form
+        class="bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto"
+        onsubmit="submitAppointment(event)"
+      >
+        <!-- Doctor Selection -->
+        <div class="mb-6">
+          <label for="doctor" class="block text-gray-700 font-bold mb-2"
+            >Select Doctor</label
+          >
+          <select
+            id="doctor"
+            name="doctor"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">-- Select a Doctor --</option>
+            <option value="Dr. Rekha Sheth">
+              Dr. Rekha Sheth - Skin and Hair Specialist
+            </option>
+            <option value="Dr. Ashok Rajgopal">
+              Dr. Ashok Rajgopal - Bones and Fracture Treatment Expert
+            </option>
+            <option value="Dr. Pradeep Bhosale">
+              Dr. Pradeep Bhosale - Orthopedics Specialist
+            </option>
+            <option value="Dr. Kaushal Malhan">
+              Dr. Kaushal Malhan - Orthopedics Specialist
+            </option>
+            <option value="Dr. Anjali Mehta">
+              Dr. Anjali Mehta - Cardiologist
+            </option>
+            <option value="Dr. Rajesh Khanna">
+              Dr. Rajesh Khanna - Neurologist
+            </option>
+            <option value="Dr. Priya Sharma">
+              Dr. Priya Sharma - Pediatrician
+            </option>
+            <option value="Dr. Amit Patel">
+              Dr. Amit Patel - General Physician
+            </option>
+            <option value="Dr. Sneha Kapoor">
+              Dr. Sneha Kapoor - Gynecologist
+            </option>
+            <option value="Dr. Ramesh Gupta">
+              Dr. Ramesh Gupta - ENT Specialist
+            </option>
+            <option value="Dr. Kavita Rao">
+              Dr. Kavita Rao - Dermatologist
+            </option>
+            <option value="Dr. Mohan Verma">Dr. Mohan Verma - Urologist</option>
+            <option value="Dr. Sunita Desai">
+              Dr. Sunita Desai - Endocrinologist
+            </option>
+            <option value="Dr. Arjun Singh">
+              Dr. Arjun Singh - Oncologist
+            </option>
+            <option value="Dr. Neha Jain">
+              Dr. Neha Jain - Ophthalmologist
+            </option>
+            <option value="Dr. Vikram Malhotra">
+              Dr. Vikram Malhotra - Psychiatrist
+            </option>
+            <option value="Dr. Pooja Nair">Dr. Pooja Nair - Dentist</option>
+            <option value="Dr. Sanjay Kulkarni">
+              Dr. Sanjay Kulkarni - Gastroenterologist
+            </option>
+            <option value="Dr. Meera Iyer">
+              Dr. Meera Iyer - Rheumatologist
+            </option>
+          </select>
+        </div>
+
+        <!-- Token Number -->
+        <div class="mb-6">
+          <label for="token" class="block text-gray-700 font-bold mb-2"
+            >Token Number</label
+          >
+          <input
+            type="number"
+            id="token"
+            name="token"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Token Number"
+            readonly
+          />
+        </div>
+
+        <!-- Patient Name -->
+        <div class="mb-6">
+          <label for="patientName" class="block text-gray-700 font-bold mb-2"
+            >Patient Name</label
+          >
+          <input
+            type="text"
+            id="patientName"
+            name="patientName"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter Patient Name"
+          />
+        </div>
+
+        <!-- Age -->
+        <div class="mb-6">
+          <label for="age" class="block text-gray-700 font-bold mb-2"
+            >Age</label
+          >
+          <input
+            type="number"
+            id="age"
+            name="age"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter Age"
+          />
+        </div>
+
+        <!-- City -->
+        <div class="mb-6">
+          <label for="city" class="block text-gray-700 font-bold mb-2"
+            >City</label
+          >
+          <input
+            type="text"
+            id="city"
+            name="city"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter City"
+          />
+        </div>
+
+        <!-- Village -->
+        <div class="mb-6">
+          <label for="village" class="block text-gray-700 font-bold mb-2"
+            >Village</label
+          >
+          <input
+            type="text"
+            id="village"
+            name="village"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter Village"
+          />
+        </div>
+
+        <!-- Mobile Number -->
+        <div class="mb-6">
+          <label for="mobile" class="block text-gray-700 font-bold mb-2"
+            >Mobile Number</label
+          >
+          <input
+            type="tel"
+            id="mobile"
+            name="mobile"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter Mobile Number"
+          />
+        </div>
+
+        <!-- Additional Information -->
+        <div class="mb-6">
+          <label for="additionalInfo" class="block text-gray-700 font-bold mb-2"
+            >Additional Information</label
+          >
+          <textarea
+            id="additionalInfo"
+            name="additionalInfo"
+            rows="4"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter any additional information"
+          ></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700"
+          >
+            Submit Appointment
+          </button>
+        </div>
+      </form>
+
+      <!-- Token Card Container -->
+      <div id="tokenCardContainer" class="mt-8"></div>
+    </div>
+  </body>
+</html>

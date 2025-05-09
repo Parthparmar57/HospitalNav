@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot | HospitalNav</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .chat-container {
+            height: 500px;
+            scrollbar-width: thin;
+        }
+        .user-message {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 18px 18px 0 18px;
+        }
+        .bot-message {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            border-radius: 18px 18px 18px 0;
+        }
+        .typing-indicator span {
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold">HospitalNav</div>
+            <div class="flex space-x-4">
+                <a href="index.html" class="hover:text-blue-200">Home</a>
+                <a href="map.html" class="hover:text-blue-200">Map</a>
+                <a href="directory.html" class="hover:text-blue-200">Doctors</a>
+                <a href="chatbot.html" class="font-bold">Chatbot</a>
+                <a href="emergency.html" class="hover:text-blue-200">Emergency</a>
+                <select id="language-selector" class="bg-blue-700 text-white px-2 rounded">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="gu">ગુજરાતી</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Chat Interface -->
+            <div class="w-full md:w-2/3">
+                <h1 class="text-3xl font-bold mb-6">AI Hospital Assistant</h1>
+                
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- Chat Header -->
+                    <div class="bg-blue-600 text-white p-4 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center mr-3">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold">HospitalNav Bot</h2>
+                            <p class="text-xs opacity-80">AI-powered assistant</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Messages -->
+                    <div class="chat-container p-4 overflow-y-auto">
+                        <div class="space-y-3" id="chat-messages">
+                            <!-- Welcome Message -->
+                            <div class="flex">
+                                <div class="bot-message px-4 py-2 max-w-xs md:max-w-md">
+                                    <p id="welcome-message">Hello! I'm your hospital assistant. How can I help you today?</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Sample Questions -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+                                <button class="quick-question bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-full text-sm" data-question="Where is the cardiology department?">
+                                    Where is cardiology?
+                                </button>
+                                <button class="quick-question bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-full text-sm" data-question="How do I book an appointment?">
+                                    Book appointment
+                                </button>
+                                <button class="quick-question bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-full text-sm" data-question="Where can I find emergency services?">
+                                    Emergency location
+                                </button>
+                                <button class="quick-question bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-full text-sm" data-question="What are the visiting hours?">
+                                    Visiting hours
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Typing Indicator (Hidden by default) -->
+                    <div id="typing-indicator" class="typing-indicator p-4 hidden">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-2">
+                                <i class="fas fa-robot text-gray-500"></i>
+                            </div>
+                            <div class="flex space-x-1">
+                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Input Area -->
+                    <div class="border-t p-4">
+                        <form id="chat-form" class="flex">
+                            <input type="text" id="user-input" placeholder="Type your question..." 
+                                   class="flex-1 p-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button type="submit" class="bg-blue-600 text-white px-4 rounded-r hover:bg-blue-700">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Help Section -->
+            <div class="w-full md:w-1/3">
+                <h2 class="text-2xl font-bold mb-4">Common Questions</h2>
+                
+                <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                    <h3 class="font-bold mb-2 text-blue-600"><i class="fas fa-map-marker-alt mr-2"></i> Navigation Help</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><button class="text-left hover:text-blue-600" data-question="How do I get to the emergency department?">→ Emergency department</button></li>
+                        <li><button class="text-left hover:text-blue-600" data-question="Where is the pharmacy?">→ Pharmacy location</button></li>
+                        <li><button class="text-left hover:text-blue-600" data-question="How do I find the cafeteria?">→ Cafeteria directions</button></li>
+                        <li><button class="text-left hover:text-blue-600" data-question="Where are the restrooms?">→ Restroom locations</button></li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                    <h3 class="font-bold mb-2 text-blue-600"><i class="fas fa-user-md mr-2"></i> Doctor Information</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><button class="text-left hover:text-blue-600" data-question="How do I book an appointment with a cardiologist?">→ Cardiology appointments</button></li>
+                        <li><button class="text-left hover:text-blue-600" data-question="Who is the head of neurology?">→ Neurology department</button></li>
+                        <li><button class="text-left hover:text-blue-600" data-question="What are the pediatrician's hours?">→ Pediatric hours</button></li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold mb-2 text-blue-600"><i class="fas fa-ambulance mr-2"></i> Emergency Help</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><button class="text-left hover:text-blue-600" data-question="What should I do in a medical emergency?">→ Emergency procedures</button></li>
+                        <li><button class="text-left hover:text-blue-600" data-question="What are the emergency contact numbers?">→ Emergency contacts</button></li>
+                        <li><button class="text-left hover:text-blue-600" data-question="Where is the nearest hospital?">→ Nearby hospitals</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p>© 2023 HospitalNav. All rights reserved.</p>
+                <p class="mt-2"><i class="fas fa-phone-alt mr-2"></i> Emergency: 108 (Ambulance) | 102 (Emergency)</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Language translations
+        const translations = {
+            en: {
+                welcome: "Hello! I'm your hospital assistant. How can I help you today?",
+                quick_questions: ["Where is cardiology?", "Book appointment", "Emergency location", "Visiting hours"],
+                responses: {
+                    "Where is the cardiology department?": "The cardiology department is on the 2nd floor, west wing. You can take the main elevator and turn left after exiting.",
+                    "How do I book an appointment?": "You can book appointments through our website, by calling 1800-123-4567, or by visiting the reception desk on the ground floor.",
+                    "Where can I find emergency services?": "Emergency services are located on the ground floor near the main entrance. Follow the red signs or ask any staff member for directions.",
+                    "What are the visiting hours?": "General visiting hours are from 10AM to 8PM daily. ICU visiting hours are limited to 11AM-12PM and 5PM-6PM."
+                }
+            },
+            hi: {
+                welcome: "नमस्ते! मैं आपका अस्पताल सहायक हूँ। आज मैं आपकी कैसे मदद कर सकता हूँ?",
+                quick_questions: ["कार्डियोलॉजी विभाग कहाँ है?", "अपॉइंटमेंट बुक करें", "आपातकालीन स्थान", "मिलने का समय"],
+                responses: {
+                    "Where is the cardiology department?": "कार्डियोलॉजी विभाग दूसरी मंजिल पर, पश्चिमी विंग में है। आप मुख्य लिफ्ट लेकर बाहर निकलने के बाद बाएं मुड़ सकते हैं।",
+                    "How do I book an appointment?": "आप हमारी वेबसाइट के माध्यम से, 1800-123-4567 पर कॉल करके, या ग्राउंड फ्लोर पर रिसेप्शन डेस्क पर जाकर अपॉइंटमेंट बुक कर सकते हैं।",
+                    "Where can I find emergency services?": "आपातकालीन सेवाएं मुख्य प्रवेश द्वार के पास ग्राउंड फ्लोर पर स्थित हैं। लाल संकेतों का पालन करें या किसी भी स्टाफ सदस्य से दिशा-निर्देश पूछें।",
+                    "What are the visiting hours?": "सामान्य मिलने का समय प्रतिदिन सुबह 10 बजे से रात 8 बजे तक है। आईसीयू मिलने का समय सुबह 11-12 बजे और शाम 5-6 बजे तक सीमित है।"
+                }
+            },
+            gu: {
+                welcome: "નમસ્તે! હું તમારો હોસ્પિટલ સહાયક છું. આજે હું તમારી કેવી રીતે મદદ કરી શકું?",
+                quick_questions: ["કાર્ડિયોલોજી વિભાગ ક્યાં છે?", "એપોઇન્ટમેન્ટ બુક કરો", "અત્યાવશ્યક સેવા સ્થાન", "મુલાકાતી સમય"],
+                responses: {
+                    "Where is the cardiology department?": "કાર્ડિયોલોજી વિભાગ બીજા માળ પર, પશ્ચિમ વિંગમાં છે. તમે મુખ્ય લિફ્ટ લઈને બહાર નીકળ્યા પછી ડાબી બાજુ વળી શકો છો.",
+                    "How do I book an appointment?": "તમે અમારી વેબસાઇટ દ્વારા, 1800-123-4567 પર કોલ કરીને, અથવા ગ્રાઉન્ડ ફ્લોર પર રીસેપ્શન ડેસ્ક પર જઈને એપોઇન્ટમેન્ટ બુક કરી શકો છો.",
+                    "Where can I find emergency services?": "અત્યાવશ્યક સેવાઓ મુખ્ય પ્રવેશદ્વાર નજીક ગ્રાઉન્ડ ફ્લોર પર સ્થિત છે. લાલ સંકેતોનું પાલન કરો અથવા કોઈપણ સ્ટાફ સભ્યને દિશા-નિર્દેશ માટે પૂછો.",
+                    "What are the visiting hours?": "સામાન્ય મુલાકાતી સમય દરરોજ સવારે 10 વાગ્યાથી રાત્રે 8 વાગ્યા સુધી છે. ICU મુલાકાતી સમય સવારે 11-12 વાગ્યા અને સાંજે 5-6 વાગ્યા સુધી મર્યાદિત છે."
+                }
+            }
+        };
+
+        // Current language
+        let currentLanguage = 'en';
+        
+        // DOM elements
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const languageSelector = document.getElementById('language-selector');
+        const welcomeMessage = document.getElementById('welcome-message');
+        
+        // Set initial language
+        updateLanguage();
+        
+        // Language selector change
+        languageSelector.addEventListener('change', function() {
+            currentLanguage = this.value;
+            updateLanguage();
+        });
+        
+        // Update language
+        function updateLanguage() {
+            welcomeMessage.textContent = translations[currentLanguage].welcome;
+            
+            // Update quick questions
+            const quickQuestions = document.querySelectorAll('.quick-question');
+            quickQuestions.forEach((btn, index) => {
+                btn.textContent = translations[currentLanguage].quick_questions[index];
+                btn.dataset.question = translations[currentLanguage].quick_questions[index];
+            });
+        }
+        
+        // Quick question buttons
+        document.querySelectorAll('.quick-question, [data-question]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const question = this.dataset.question;
+                userInput.value = question;
+                chatForm.dispatchEvent(new Event('submit'));
+            });
+        });
+        
+        // Chat form submission
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (message === '') return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            userInput.value = '';
+            
+            // Show typing indicator
+            typingIndicator.classList.remove('hidden');
+            
+            // Simulate bot response after delay
+            setTimeout(() => {
+                typingIndicator.classList.add('hidden');
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+        });
+        
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = sender === 'user' ? 'user-message px-4 py-2 max-w-xs md:max-w-md' : 'bot-message px-4 py-2 max-w-xs md:max-w-md';
+            messageContent.textContent = text;
+            
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Get bot response
+        function getBotResponse(question) {
+            // Check if we have a direct translation for this question
+            if (translations[currentLanguage].responses[question]) {
+                return translations[currentLanguage].responses[question];
+            }
+            
+            // Default responses
+            const defaultResponses = {
+                en: "I can help with directions, doctor information, appointments, and general hospital queries. Could you please be more specific?",
+                hi: "मैं दिशा-निर्देश, डॉक्टर की जानकारी, अपॉइंटमेंट और सामान्य अस्पताल प्रश्नों में मदद कर सकता हूँ। क्या आप कृपया और विशिष्ट हो सकते हैं?",
+                gu: "હું દિશા-નિર્દેશ, ડૉક્ટરની માહિતી, એપોઇન્ટમેન્ટ અને સામાન્ય હોસ્પિટલ પ્રશ્નોમાં મદદ કરી શકું છું. શું તમે કૃપા કરીને વધુ ચોક્કસ હોઈ શકો છો?"
+            };
+            
+            return defaultResponses[currentLanguage];
+        }
+    </script>
+</body>
+</html>

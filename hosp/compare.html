@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Comparison | HospitalNav</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        .comparison-table th {
+            background-color: #f8fafc;
+        }
+        .hospital-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        #comparison-map { 
+            height: 400px;
+            border-radius: 0.5rem;
+        }
+        .rating-star {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold">HospitalNav</div>
+            <div class="flex space-x-4">
+                <a href="index.html" class="hover:text-blue-200">Home</a>
+                <a href="map.html" class="hover:text-blue-200">Map</a>
+                <a href="directory.html" class="hover:text-blue-200">Doctors</a>
+                <a href="chatbot.html" class="hover:text-blue-200">Chatbot</a>
+                <a href="emergency.html" class="hover:text-blue-200">Emergency</a>
+                <select class="bg-blue-700 text-white px-2 rounded">
+                    <option>English</option>
+                    <option>हिंदी</option>
+                    <option>ગુજરાતી</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold mb-6">Hospital Comparison Tool</h1>
+        
+        <!-- Search and Filter -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-gray-700 mb-2">Location</label>
+                    <input type="text" placeholder="Enter your location" 
+                           class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Specialty</label>
+                    <select class="w-full p-2 border rounded">
+                        <option>All Specialties</option>
+                        <option>Cardiology</option>
+                        <option>Neurology</option>
+                        <option>Pediatrics</option>
+                        <option>Emergency Care</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Sort By</label>
+                    <select class="w-full p-2 border rounded">
+                        <option>Distance</option>
+                        <option>Rating</option>
+                        <option>Wait Time</option>
+                    </select>
+                </div>
+            </div>
+            <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                <i class="fas fa-search mr-2"></i> Find Hospitals
+            </button>
+        </div>
+
+        <!-- Map View -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-xl font-bold mb-4">Hospital Locations</h2>
+            <div id="comparison-map"></div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8 overflow-x-auto">
+            <h2 class="text-xl font-bold mb-4">Compare Hospitals</h2>
+            <table class="min-w-full comparison-table">
+                <thead>
+                    <tr class="border-b">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hospital</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distance</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wait Time</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Services</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <!-- Hospital 1 -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                    <i class="fas fa-hospital text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">City General Hospital</div>
+                                    <div class="text-sm text-gray-500">24/7 Emergency</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm">2.5 km</div>
+                            <div class="text-xs text-gray-500">8 min drive</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="ml-1 text-sm">4.7</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm">
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Low</span>
+                                <span class="ml-1">15 min</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Cardiology</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">ICU</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Pharmacy</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900 mr-3">View</button>
+                            <button class="text-green-600 hover:text-green-900">Directions</button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Hospital 2 -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                    <i class="fas fa-hospital text-green-600"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Sunshine Medical Center</div>
+                                    <div class="text-sm text-gray-500">Pediatric Specialists</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm">3.8 km</div>
+                            <div class="text-xs text-gray-500">12 min drive</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="far fa-star"></i></span>
+                                <span class="ml-1 text-sm">4.2</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm">
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">Medium</span>
+                                <span class="ml-1">30 min</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Pediatrics</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Maternity</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Lab</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900 mr-3">View</button>
+                            <button class="text-green-600 hover:text-green-900">Directions</button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Hospital 3 -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                    <i class="fas fa-hospital text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Metro Heart Institute</div>
+                                    <div class="text-sm text-gray-500">Cardiac Specialists</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm">5.2 km</div>
+                            <div class="text-xs text-gray-500">15 min drive</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="rating-star"><i class="fas fa-star"></i></span>
+                                <span class="ml-1 text-sm">5.0</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm">
+                                <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">High</span>
+                                <span class="ml-1">45 min</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Cardiology</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Surgery</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">ICU</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900 mr-3">View</button>
+                            <button class="text-green-600 hover:text-green-900">Directions</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Hospital Cards -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Hospital 1 Card -->
+            <div class="hospital-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                <div class="h-40 bg-blue-600 flex items-center justify-center">
+                    <i class="fas fa-hospital text-white text-5xl"></i>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-xl mb-2">City General Hospital</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star-half-alt"></i></span>
+                        <span class="ml-1 text-gray-600">4.7 (128)</span>
+                    </div>
+                    <div class="flex items-center text-gray-600 mb-3">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>2.5 km away • 8 min drive</span>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">Cardiology</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">ICU</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">Pharmacy</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            <i class="fas fa-directions mr-1"></i> Directions
+                        </button>
+                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">
+                            <i class="fas fa-info-circle mr-1"></i> Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hospital 2 Card -->
+            <div class="hospital-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                <div class="h-40 bg-green-600 flex items-center justify-center">
+                    <i class="fas fa-hospital text-white text-5xl"></i>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-xl mb-2">Sunshine Medical Center</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="far fa-star"></i></span>
+                        <span class="ml-1 text-gray-600">4.2 (89)</span>
+                    </div>
+                    <div class="flex items-center text-gray-600 mb-3">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>3.8 km away • 12 min drive</span>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">Pediatrics</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">Maternity</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">Lab</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            <i class="fas fa-directions mr-1"></i> Directions
+                        </button>
+                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">
+                            <i class="fas fa-info-circle mr-1"></i> Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hospital 3 Card -->
+            <div class="hospital-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                <div class="h-40 bg-purple-600 flex items-center justify-center">
+                    <i class="fas fa-hospital text-white text-5xl"></i>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-xl mb-2">Metro Heart Institute</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="rating-star"><i class="fas fa-star"></i></span>
+                        <span class="ml-1 text-gray-600">5.0 (156)</span>
+                    </div>
+                    <div class="flex items-center text-gray-600 mb-3">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>5.2 km away • 15 min drive</span>
+                    </div>
+                    <div class="mb-4">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">Cardiology</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">Surgery</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-1 mb-1">ICU</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            <i class="fas fa-directions mr-1"></i> Directions
+                        </button>
+                        <button class="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">
+                            <i class="fas fa-info-circle mr-1"></i> Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Chart -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4">Comparison Chart</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feature</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City General</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sunshine Medical</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metro Heart</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Emergency Services</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i class="fas fa-check text-green-500"></i> Available</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i class="fas fa-check text-green-500"></i> Available</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i class="fas fa-check text-green-500"></i> Available</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ICU Beds</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">20</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cardiac Surgery</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i class="fas fa-check text-green-500"></i> Available</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i class="fas fa-times text-red-500"></i> Not Available</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i class="fas fa-check text-green-500"></i> Available</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Pediatric Care</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Basic</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Specialized</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Basic</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Pharmacy</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">24/7</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8AM-10PM</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">24/7</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p>© 2023 HospitalNav. All rights reserved.</p>
+                <p class="mt-2"><i class="fas fa-phone-alt mr-2"></i> Emergency: 108 (Ambulance) | 102 (Emergency)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('comparison-map').setView([51.505, -0.09], 12);
+        
+        // Add tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Hospital locations
+        const hospitals = [
+            {
+                name: "City General Hospital",
+                position: [51.505, -0.09],
+                type: "general",
+                color: "blue"
+            },
+            {
+                name: "Sunshine Medical Center",
+                position: [51.51, -0.1],
+                type: "pediatric",
+                color: "green"
+            },
+            {
+                name: "Metro Heart Institute",
+                position: [51.5, -0.08],
+                type: "cardiac",
+                color: "purple"
+            }
+        ];
+
+        // Add markers for each hospital
+        hospitals.forEach(hospital => {
+            const marker = L.marker(hospital.position, {
+                icon: L.divIcon({
+                    className: 'hospital-icon',
+                    html: `<i class="fas fa-hospital" style="color: ${hospital.color}; font-size: 2rem;"></i>`,
+                    iconSize: [30, 30]
+                })
+            }).addTo(map);
+            
+            marker.bindPopup(`
+                <b>${hospital.name}</b><br>
+                <button class="mt-2 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm" onclick="alert('Directions to ${hospital.name}')">
+                    <i class="fas fa-directions mr-1"></i> Get Directions
+                </button>
+                <button class="mt-1 bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300 text-sm" onclick="alert('Viewing details for ${hospital.name}')">
+                    <i class="fas fa-info-circle mr-1"></i> Details
+                </button>
+            `);
+        });
+
+        // Add user location marker if geolocation is available
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                
+                L.marker([userLat, userLng], {
+                    icon: L.divIcon({
+                        className: 'user-location',
+                        html: '<i class="fas fa-user" style="color: red; font-size: 1.5rem;"></i>',
+                        iconSize: [30, 30]
+                    })
+                }).addTo(map).bindPopup("Your Location");
+                
+                // Add circle to show accuracy
+                L.circle([userLat, userLng], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.2,
+                    radius: position.coords.accuracy / 2
+                }).addTo(map);
+            });
+        }
+
+        // Sort functionality
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('change', function() {
+                alert(`In a real implementation, this would sort hospitals by ${this.value}`);
+            });
+        });
+    </script>
+</body>
+</html>

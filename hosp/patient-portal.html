@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Portal | HospitalNav</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .login-card {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .prescription-item:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold">HospitalNav</div>
+            <div class="flex space-x-4">
+                <a href="index.html" class="hover:text-blue-200">Home</a>
+                <a href="map.html" class="hover:text-blue-200">Map</a>
+                <a href="directory.html" class="hover:text-blue-200">Doctors</a>
+                <a href="chatbot.html" class="hover:text-blue-200">Chatbot</a>
+                <select class="bg-blue-700 text-white px-2 rounded">
+                    <option>English</option>
+                    <option>हिंदी</option>
+                    <option>ગુજરાતી</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <!-- Login Section (shown when not logged in) -->
+        <div id="login-section" class="max-w-md mx-auto login-card bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold mb-6 text-center">Patient Portal Login</h1>
+            
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Patient ID</label>
+                    <input type="text" placeholder="Enter your patient ID" 
+                           class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" placeholder="Enter your password" 
+                           class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember" class="mr-2">
+                    <label for="remember" class="text-gray-700">Remember me</label>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                    Login
+                </button>
+                <div class="text-center">
+                    <a href="#" class="text-blue-600 hover:underline text-sm">Forgot password?</a>
+                </div>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t text-center">
+                <p class="text-gray-600">New patient? <a href="#" class="text-blue-600 hover:underline">Register here</a></p>
+            </div>
+        </div>
+
+        <!-- Dashboard Section (hidden by default) -->
+        <div id="dashboard-section" class="hidden">
+            <!-- Dashboard Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Welcome back, <span id="patient-name">Rajesh Patel</span></h1>
+                    <p class="text-gray-600">Last login: <span id="last-login">Today at 10:30 AM</span></p>
+                </div>
+                <button id="logout-btn" class="mt-4 md:mt-0 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </button>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Upcoming Appointments -->
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-calendar-check text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Upcoming Appointments</h3>
+                            <p class="text-gray-600">Next scheduled visit</p>
+                        </div>
+                    </div>
+                    <div id="next-appointment">
+                        <p class="text-xl font-bold mb-1">Dr. Priya Sharma</p>
+                        <p class="text-gray-700"><i class="fas fa-clock mr-2 text-blue-600"></i> Tomorrow, 10:30 AM</p>
+                        <p class="text-gray-700"><i class="fas fa-map-marker-alt mr-2 text-blue-600"></i> Cardiology Dept, Room 205</p>
+                        <div class="mt-4 flex space-x-2">
+                            <button class="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">
+                                <i class="fas fa-directions mr-1"></i> Directions
+                            </button>
+                            <button class="bg-gray-200 text-gray-700 px-4 py-1 rounded hover:bg-gray-300 text-sm">
+                                <i class="fas fa-calendar-times mr-1"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Medical Records -->
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-file-medical text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Medical Records</h3>
+                            <p class="text-gray-600">Your health history</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700"><i class="fas fa-file-alt mr-2 text-green-600"></i> Last Visit Summary</p>
+                            <a href="#" class="text-green-600 hover:underline text-sm">View</a>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700"><i class="fas fa-vial mr-2 text-green-600"></i> Lab Results</p>
+                            <a href="#" class="text-green-600 hover:underline text-sm">View</a>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700"><i class="fas fa-x-ray mr-2 text-green-600"></i> Imaging Reports</p>
+                            <a href="#" class="text-green-600 hover:underline text-sm">View</a>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button class="w-full bg-green-100 text-green-600 py-1 rounded hover:bg-green-200 text-sm">
+                            <i class="fas fa-download mr-1"></i> Download All Records
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Prescriptions -->
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-md border-l-4 border-purple-500 transition duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-prescription-bottle-alt text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Prescriptions</h3>
+                            <p class="text-gray-600">Current medications</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="prescription-item p-2 rounded border border-gray-100">
+                            <div class="flex justify-between items-center">
+                                <p class="font-bold">Atorvastatin</p>
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">Active</span>
+                            </div>
+                            <p class="text-sm text-gray-600">20mg, once daily at bedtime</p>
+                            <p class="text-xs text-gray-500">Refills: 2 remaining</p>
+                        </div>
+                        <div class="prescription-item p-2 rounded border border-gray-100">
+                            <div class="flex justify-between items-center">
+                                <p class="font-bold">Metformin</p>
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">Active</span>
+                            </div>
+                            <p class="text-sm text-gray-600">500mg, twice daily with meals</p>
+                            <p class="text-xs text-gray-500">Refills: 1 remaining</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button class="w-full bg-purple-100 text-purple-600 py-1 rounded hover:bg-purple-200 text-sm">
+                            <i class="fas fa-history mr-1"></i> View All Prescriptions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-xl font-bold mb-4">Recent Activity</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-11-15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Doctor Visit</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Cardiology</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Follow-up consultation</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-11-10</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Lab Test</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Pathology</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Complete blood count</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-11-05</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Prescription</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Pharmacy</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Metformin refill</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <button class="bg-white p-4 rounded-lg shadow-md hover:bg-gray-50 text-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-calendar-plus text-blue-600"></i>
+                    </div>
+                    <p class="font-medium">Book Appointment</p>
+                </button>
+                <button class="bg-white p-4 rounded-lg shadow-md hover:bg-gray-50 text-center">
+                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-file-download text-green-600"></i>
+                    </div>
+                    <p class="font-medium">Download Records</p>
+                </button>
+                <button class="bg-white p-4 rounded-lg shadow-md hover:bg-gray-50 text-center">
+                    <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-prescription-bottle-alt text-purple-600"></i>
+                    </div>
+                    <p class="font-medium">Request Refill</p>
+                </button>
+                <button class="bg-white p-4 rounded-lg shadow-md hover:bg-gray-50 text-center">
+                    <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-question-circle text-yellow-600"></i>
+                    </div>
+                    <p class="font-medium">Get Help</p>
+                </button>
+            </div>
+
+            <!-- Privacy Policy -->
+            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h2 class="text-xl font-bold mb-4">Privacy & Security</h2>
+                <p class="text-gray-700 mb-4">Your health information is protected and secure. We use industry-standard encryption to protect your data.</p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                        <i class="fas fa-shield-alt mr-1"></i> Security Settings
+                    </button>
+                    <button class="bg-white border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50 text-sm">
+                        <i class="fas fa-file-alt mr-1"></i> View Privacy Policy
+                    </button>
+                    <button class="bg-white border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50 text-sm">
+                        <i class="fas fa-user-lock mr-1"></i> Manage Permissions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p>© 2023 HospitalNav. All rights reserved.</p>
+                <p class="mt-2"><i class="fas fa-phone-alt mr-2"></i> Emergency: 108 (Ambulance) | 102 (Emergency)</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Login functionality
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate login
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            
+            // Update last login time
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('last-login').textContent = now.toLocaleDateString('en-US', options);
+            
+            // Store login state in localStorage
+            localStorage.setItem('patientLoggedIn', 'true');
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                document.getElementById('login-section').classList.remove('hidden');
+                document.getElementById('dashboard-section').classList.add('hidden');
+                localStorage.removeItem('patientLoggedIn');
+            }
+        });
+
+        // Check if user is already logged in
+        if (localStorage.getItem('patientLoggedIn') === 'true') {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('last-login').textContent = now.toLocaleDateString('en-US', options);
+        }
+    </script>
+</body>
+</html>

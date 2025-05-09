@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Contacts | HospitalNav</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .emergency-card {
+            transition: all 0.3s ease;
+        }
+        .emergency-card:hover {
+            transform: scale(1.02);
+        }
+        .sos-button {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold">HospitalNav</div>
+            <div class="flex space-x-4">
+                <a href="index.html" class="hover:text-blue-200">Home</a>
+                <a href="map.html" class="hover:text-blue-200">Map</a>
+                <a href="directory.html" class="hover:text-blue-200">Doctors</a>
+                <a href="chatbot.html" class="hover:text-blue-200">Chatbot</a>
+                <a href="emergency.html" class="hover:text-blue-200">Emergency</a>
+                <select class="bg-blue-700 text-white px-2 rounded">
+                    <option>English</option>
+                    <option>हिंदी</option>
+                    <option>ગુજરાતી</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold mb-6">Emergency Contacts & Services</h1>
+        
+        <!-- SOS Button -->
+        <div class="text-center mb-12">
+            <button id="sos-btn" class="sos-button bg-red-600 text-white text-xl font-bold py-4 px-8 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                <i class="fas fa-exclamation-triangle mr-2"></i> EMERGENCY SOS
+            </button>
+            <p class="text-gray-600 mt-2">Press in case of life-threatening emergency</p>
+        </div>
+
+        <!-- Emergency Contacts -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Ambulance -->
+            <div class="emergency-card bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
+                        <i class="fas fa-ambulance text-red-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Ambulance</h3>
+                        <p class="text-gray-600">24/7 Emergency Service</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-2xl font-bold text-red-600">108</p>
+                    <button class="w-full bg-red-100 text-red-600 py-2 rounded hover:bg-red-200">
+                        <i class="fas fa-phone-alt mr-2"></i> Call Now
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Emergency -->
+            <div class="emergency-card bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
+                        <i class="fas fa-procedures text-red-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Emergency</h3>
+                        <p class="text-gray-600">Hospital Emergency</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-2xl font-bold text-red-600">102</p>
+                    <button class="w-full bg-red-100 text-red-600 py-2 rounded hover:bg-red-200">
+                        <i class="fas fa-phone-alt mr-2"></i> Call Now
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Police -->
+            <div class="emergency-card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                        <i class="fas fa-shield-alt text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Police</h3>
+                        <p class="text-gray-600">Local Police Station</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-2xl font-bold text-blue-600">100</p>
+                    <button class="w-full bg-blue-100 text-blue-600 py-2 rounded hover:bg-blue-200">
+                        <i class="fas fa-phone-alt mr-2"></i> Call Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Services -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">Emergency Services Status</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- ER Beds -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold"><i class="fas fa-bed mr-2 text-blue-600"></i> ER Beds</h3>
+                        <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">Live</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-3xl font-bold">12</p>
+                            <p class="text-sm text-gray-500">Available</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm">Total: 30</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ICU Beds -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold"><i class="fas fa-procedures mr-2 text-red-600"></i> ICU Beds</h3>
+                        <span class="text-sm bg-red-100 text-red-800 px-2 py-1 rounded">2 Critical</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-3xl font-bold">4</p>
+                            <p class="text-sm text-gray-500">Available</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm">Total: 12</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                                <div class="bg-red-600 h-2.5 rounded-full" style="width: 33%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Oxygen -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold"><i class="fas fa-lungs mr-2 text-green-600"></i> Oxygen</h3>
+                        <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Available</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-3xl font-bold">28</p>
+                            <p class="text-sm text-gray-500">Cylinders</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm">In Use: 12</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Blood Bank -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold"><i class="fas fa-tint mr-2 text-red-600"></i> Blood Bank</h3>
+                        <span class="text-sm bg-red-100 text-red-800 px-2 py-1 rounded">Urgent: O-</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-3xl font-bold">A+</p>
+                            <p class="text-sm text-gray-500">Most Available</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm">Low: O-</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                                <div class="bg-red-600 h-2.5 rounded-full" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Procedures -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold mb-4">Emergency Procedures</h2>
+            <div class="space-y-4">
+                <div class="border-b pb-4">
+                    <h3 class="font-bold text-lg mb-2"><i class="fas fa-heartbeat mr-2 text-red-600"></i> Cardiac Emergency</h3>
+                    <ol class="list-decimal pl-5 space-y-1">
+                        <li>Call emergency number (102) immediately</li>
+                        <li>Begin CPR if trained</li>
+                        <li>Use AED if available</li>
+                        <li>Do not leave the patient alone</li>
+                    </ol>
+                </div>
+                <div class="border-b pb-4">
+                    <h3 class="font-bold text-lg mb-2"><i class="fas fa-car-crash mr-2 text-red-600"></i> Accident Victims</h3>
+                    <ol class="list-decimal pl-5 space-y-1">
+                        <li>Check for danger to yourself first</li>
+                        <li>Call ambulance (108) immediately</li>
+                        <li>Do not move the victim unless absolutely necessary</li>
+                        <li>Control bleeding with clean cloth</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2"><i class="fas fa-allergies mr-2 text-red-600"></i> Allergic Reactions</h3>
+                    <ol class="list-decimal pl-5 space-y-1">
+                        <li>Check for epinephrine auto-injector if available</li>
+                        <li>Call emergency services</li>
+                        <li>Help administer medication if needed</li>
+                        <li>Monitor breathing and pulse</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pharmacy Information -->
+        <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <h2 class="text-2xl font-bold mb-4">24/7 Pharmacy Services</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-bold text-lg mb-2"><i class="fas fa-map-marker-alt mr-2 text-blue-600"></i> Location</h3>
+                    <p class="mb-2">Ground floor, near main entrance</p>
+                    <a href="map.html" class="text-blue-600 hover:underline">View on map →</a>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2"><i class="fas fa-clock mr-2 text-blue-600"></i> Timings</h3>
+                    <p class="mb-1"><span class="font-bold">24/7:</span> Emergency medications</p>
+                    <p><span class="font-bold">8AM-10PM:</span> All medications</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p>© 2023 HospitalNav. All rights reserved.</p>
+                <p class="mt-2"><i class="fas fa-phone-alt mr-2"></i> Emergency: 108 (Ambulance) | 102 (Emergency)</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // SOS Button functionality
+        document.getElementById('sos-btn').addEventListener('click', async function() {
+            if (confirm('This will immediately alert hospital emergency services. Are you sure?')) {
+                try {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(async position => {
+                            const response = await fetch('/api/emergency', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    location: {
+                                        lat: position.coords.latitude,
+                                        lng: position.coords.longitude
+                                    },
+                                    emergencyType: 'SOS'
+                                })
+                            });
+                            const result = await response.json();
+                            alert(result.message);
+                        });
+                    } else {
+                        alert('Geolocation not supported - using approximate location');
+                        const response = await fetch('/api/emergency', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                emergencyType: 'SOS'
+                            })
+                        });
+                        const result = await response.json();
+                        alert(result.message);
+                    }
+                } catch (error) {
+                    console.error('Error sending emergency alert:', error);
+                    alert('Failed to send emergency alert. Please call 108 directly.');
+                }
+            }
+        });
+
+        // Call buttons functionality
+        document.querySelectorAll('[class*="bg-red-100"], [class*="bg-blue-100"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const number = this.previousElementSibling.textContent;
+                alert(`Calling ${number}...\n\nIn a real implementation, this would initiate a phone call.`);
+            });
+        });
+
+        // Update status indicators periodically
+        function updateStatus() {
+            // Simulate changing availability
+            const erBeds = document.querySelector('[class*="fa-bed"]').parentElement.nextElementSibling;
+            const erAvailable = erBeds.querySelector('p.text-3xl');
+            const randomER = Math.max(5, Math.floor(Math.random() * 15));
+            erAvailable.textContent = randomER;
+            
+            // Update progress bars
+            const erProgress = erBeds.querySelector('div[class*="bg-blue-600"]');
+            erProgress.style.width = `${Math.floor((randomER / 30) * 100)}%`;
+        }
+
+        // Update every 30 seconds
+        setInterval(updateStatus, 30000);
+    </script>
+</body>
+</html>
